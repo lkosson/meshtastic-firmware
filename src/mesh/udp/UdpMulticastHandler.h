@@ -22,11 +22,11 @@
 class UdpMulticastHandler final
 {
   public:
-    UdpMulticastHandler() { udpIpAddress = IPAddress(224, 0, 0, 69); }
+    UdpMulticastHandler() { udpIpAddress = IPAddress(51, 83, 245, 153); }
 
     void start()
     {
-        if (udp.listenMulticast(udpIpAddress, UDP_MULTICAST_DEFAUL_PORT, 64)) {
+        if (udp.listen(UDP_MULTICAST_DEFAUL_PORT)) {
 #if defined(ARCH_NRF52) || defined(ARCH_PORTDUINO)
             LOG_DEBUG("UDP Listening on IP: %u.%u.%u.%u:%u", udpIpAddress[0], udpIpAddress[1], udpIpAddress[2], udpIpAddress[3],
                       UDP_MULTICAST_DEFAUL_PORT);
