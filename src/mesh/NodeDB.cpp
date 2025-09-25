@@ -1820,8 +1820,13 @@ bool NodeDB::isFromOrToFavoritedNode(const meshtastic_MeshPacket &p)
             seenTo = true;
         }
 
-        if (seenFrom && seenTo)
-            return false; // we've seen both, and neither is a favorite, so we can stop searching early
+        if (getLastByteOfNodeNum(lite->num) == p.relay_node) {
+            if (lite->is_favorite)
+                return true;
+        }
+
+        //if (seenFrom && seenTo)
+        //    return false; // we've seen both, and neither is a favorite, so we can stop searching early
 
         // Note: if we knew that sortMeshDB was always called after any change to is_favorite, we could exit early after searching
         // all favorited nodes first.
