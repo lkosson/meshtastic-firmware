@@ -99,8 +99,21 @@ template <class T> class MemoryDynamic : public Allocator<T>
     // Alloc some storage
     virtual T *alloc(TickType_t maxWait) override
     {
-        T *p = (T *)malloc(sizeof(T));
+        T *p;
+
+#if defined(CONFIG_SPIRAM) && defined(ARCH_ESP32)
+        // attempt to allocate in PSRAM first
+        p = static_cast<T *>(ps_malloc(sizeof(T)));
+        if (p) {
+            return p;
+        }
+#endif // CONFIG_SPIRAM
+
+        // If the allocation in PSRAM failed (or PSRAM not enabled), try to
+        // allocate from the default memory pool.
+        p = static_cast<T *>(malloc(sizeof(T)));
         assert(p);
+
         return p;
     }
 };
